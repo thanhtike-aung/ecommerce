@@ -1,0 +1,6 @@
+@import "bootstrap/dist/css/bootstrap.min.css";
+
+/* Custom styles for the ecommerce site */
+body {
+    font-family: 'Inter', sans-serif;
+}
