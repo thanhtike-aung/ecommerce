@@ -1,6 +1,6 @@
 @extends('layouts.guest')
 
-@section('title', 'Login - ShopZone')
+@section('title', 'Login - Nexwear')
 
 @push('styles')
 
@@ -353,7 +353,7 @@
                             Remember me
                         </label>
                     </div>
-                    <a href="#" class="forgot-password">Forgot password?</a>
+                    <a href="{{ route('customer.password.request') }}" class="forgot-password">Forgot password?</a>
                 </div>
 
                 <button type="submit" class="btn btn-login text-white w-100" id="loginBtn">
@@ -365,7 +365,7 @@
             </form>
             <div class="text-center mt-4">
                 <span class="text-muted">Don't have an account? </span>
-                <a href="{{ route('register') }}" class="forgot-password">Sign up</a>
+                <a href="{{ route('customer.register') }}" class="forgot-password">Sign up</a>
             </div>
         </div>
     </div>
@@ -410,7 +410,7 @@ $(function () {
         $spinner.removeClass('d-none');
 
         $.ajax({
-            url: "{{ route('login') }}",
+            url: "{{ route('customer.login') }}",
             method: "POST",
             data: $form.serialize(),
             headers: {
@@ -497,12 +497,12 @@ $(function () {
     });
 
     // Auto-fill demo (remove in production)
-    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-        setTimeout(function() {
-            $('#floatingEmail').val('demo@shopzone.com');
-            $('#floatingPassword').val('password123');
-        }, 500);
-    }
+    // if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+    //     setTimeout(function() {
+    //         $('#floatingEmail').val('demo@shopzone.com');
+    //         $('#floatingPassword').val('password123');
+    //     }, 500);
+    // }
 });
 </script>
 @endpush

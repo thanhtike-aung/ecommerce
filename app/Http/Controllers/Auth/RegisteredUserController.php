@@ -16,9 +16,9 @@ class RegisteredUserController extends Controller
     /**
      * Display the registration view.
      */
-    public function create()
+    public function create(Request $request)
     {
-        return view('auth.register');
+        return view('auth.customer.register');
     }
 
     /**
@@ -29,15 +29,14 @@ class RegisteredUserController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'first_name' => ['required', 'string', 'max:255'],
-            'last_name' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'agree_terms' => ['required', 'accepted'],
+            'password' => ['required', 'confirmed', 'min:6', 'max:255'],
+            'terms' => ['required', 'accepted'],
         ]);
 
         $user = User::create([
-            'name' => $request->first_name . ' ' . $request->last_name,
+            'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
@@ -46,15 +45,16 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        // Check if request expects JSON (AJAX)
+        $redirectPath = '/';
+
         if ($request->expectsJson()) {
             return response()->json([
                 'success' => true,
                 'message' => 'Registration successful',
-                'redirect' => redirect()->intended('/dashboard')->getTargetUrl()
+                'redirect' => redirect()->intended($redirectPath)->getTargetUrl()
             ]);
         }
 
-        return redirect()->intended('/dashboard');
+        return redirect()->intended($redirectPath);
     }
 }

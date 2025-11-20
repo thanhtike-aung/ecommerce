@@ -21,6 +21,17 @@ class RedirectIfAuthenticated
 
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
+                // Check if the user is an admin and trying to access admin routes
+                if (Auth::user()->isAdmin() && $request->is('admin*')) {
+                    return redirect('/admin/dashboard');
+                }
+
+                // Check if the user is a customer and trying to access customer routes
+                if (Auth::user()->isCustomer() && $request->is('customer*')) {
+                    return redirect('/customer/dashboard');
+                }
+
+                // Default redirect
                 return redirect(RouteServiceProvider::HOME);
             }
         }

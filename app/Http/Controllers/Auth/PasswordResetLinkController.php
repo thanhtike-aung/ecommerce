@@ -11,6 +11,22 @@ use Illuminate\Validation\ValidationException;
 class PasswordResetLinkController extends Controller
 {
     /**
+     * Display the password reset link request view.
+     */
+    public function create(Request $request)
+    {
+        // Determine if this is an admin or customer request based on the route
+        $routeName = $request->route()->getName();
+
+        if ($routeName === 'admin.password.request') {
+            return view('auth.admin.forgot-password');
+        }
+
+        // Default to customer forgot password - use existing view
+        return view('auth.forgot-password');
+    }
+
+    /**
      * Handle an incoming password reset link request.
      *
      * @throws \Illuminate\Validation\ValidationException

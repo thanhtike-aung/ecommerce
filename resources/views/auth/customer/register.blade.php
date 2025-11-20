@@ -1,6 +1,6 @@
 @extends('layouts.guest')
 
-@section('title', 'Sign Up - ShopZone')
+@section('title', 'Sign Up - Nexwear')
 
 @push('styles')
     <style>
@@ -307,7 +307,7 @@
     <div class="signup-right col-md-7">
         <div class="w-100">
             <div class="welcome-text">Create Account</div>
-            <div class="welcome-subtitle">Join ShopZone today and start shopping</div>
+            <div class="welcome-subtitle">Join NEXWEAR today and start shopping</div>
 
             <div id="errorBox" class="alert-modern d-none">
                 <i class="bi bi-exclamation-triangle-fill me-2"></i>
@@ -326,7 +326,7 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-floating">
-                            <input type="text" name="last_name" class="form-control" id="floatingLastName" placeholder="Last Name" required>
+                            <input type="text" name="last_name" class="form-control" id="floatingLastName" placeholder="Last Name">
                             <label for="floatingLastName">
                                 <i class="bi bi-person me-2"></i>Last Name
                             </label>
@@ -342,7 +342,7 @@
                 </div>
 
                 <div class="form-floating position-relative">
-                    <input type="password" name="password" class="form-control" id="floatingPassword" placeholder="Password" required minlength="8">
+                    <input type="password" name="password" class="form-control" id="floatingPassword" placeholder="Password" required minlength="6">
                     <label for="floatingPassword">
                         <i class="bi bi-lock me-2"></i>Password
                     </label>
@@ -386,7 +386,7 @@
 
             <div class="text-center mt-4">
                 <span class="text-muted">Already have an account? </span>
-                <a href="{{ route('login') }}" class="login-link">Sign in</a>
+                <a href="{{ route('customer.login') }}" class="forgot-password">Sign in</a>
             </div>
         </div>
     </div>
@@ -437,39 +437,35 @@ $(function () {
         let strength = 0;
         let feedback = [];
 
-        // Length check
-        if (password.length >= 8) strength++;
-        else feedback.push('At least 8 characters');
+        // // Length check
+        // if (password.length >= 8) strength++;
+        // else feedback.push('At least 8 characters');
 
-        // Uppercase check
-        if (/[A-Z]/.test(password)) strength++;
-        else feedback.push('One uppercase letter');
+        // // Uppercase check
+        // if (/[A-Z]/.test(password)) strength++;
+        // else feedback.push('One uppercase letter');
 
-        // Lowercase check
-        if (/[a-z]/.test(password)) strength++;
-        else feedback.push('One lowercase letter');
+        // // Lowercase check
+        // if (/[a-z]/.test(password)) strength++;
+        // else feedback.push('One lowercase letter');
 
-        // Number check
-        if (/\d/.test(password)) strength++;
-        else feedback.push('One number');
+        // // Number check
+        // if (/\d/.test(password)) strength++;
+        // else feedback.push('One number');
 
-        // Special character check
-        if (/[!@#$%^&*(),.?":{}|<>]/.test(password)) strength++;
-        else feedback.push('One special character');
+        // let strengthText = '';
+        // let strengthClass = '';
 
-        let strengthText = '';
-        let strengthClass = '';
-
-        if (strength < 3) {
-            strengthText = 'Weak';
-            strengthClass = 'strength-weak';
-        } else if (strength < 5) {
-            strengthText = 'Medium';
-            strengthClass = 'strength-medium';
-        } else {
-            strengthText = 'Strong';
-            strengthClass = 'strength-strong';
-        }
+        // if (strength < 3) {
+        //     strengthText = 'Weak';
+        //     strengthClass = 'strength-weak';
+        // } else if (strength < 5) {
+        //     strengthText = 'Medium';
+        //     strengthClass = 'strength-medium';
+        // } else {
+        //     strengthText = 'Strong';
+        //     strengthClass = 'strength-strong';
+        // }
 
         strengthDiv.html(`
             <div class="${strengthClass}">
@@ -522,7 +518,7 @@ $(function () {
         $spinner.removeClass('d-none');
 
         $.ajax({
-            url: "{{ route('register') }}",
+            url: "{{ route('customer.register') }}",
             method: "POST",
             data: $form.serialize(),
             success: function(res) {

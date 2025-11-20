@@ -180,55 +180,7 @@
 @endpush
 
 @section('navigation')
-<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top">
-    <div class="container">
-        <a class="navbar-brand fw-bold" href="#">
-            <i class="bi bi-shop text-primary"></i> Nexwear
-        </a>
-
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav me-auto">
-                <li class="nav-item">
-                    <a class="nav-link active" href="#home">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('brand.index') }}">Brands</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#categories">Categories</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#products">Products</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#about">About</a>
-                </li>
-            </ul>
-
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="bi bi-search"></i></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="bi bi-heart"></i></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="bi bi-cart3"></i> <span class="badge bg-primary">0</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="btn btn-outline-primary ms-2" href="{{ route('login') }}">Login</a>
-                </li>
-                <li class="nav-item">
-                    <a class="btn btn-primary ms-2" href="{{ route('register') }}">Sign Up</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
+    @include('layouts.partials.navbar', ['isFixed' => true])
 @endsection
 
 @section('content')
@@ -510,6 +462,7 @@ $(document).ready(function() {
             }, 1000);
         }
     });
+
 
     // Navbar background on scroll
     $(window).scroll(function() {

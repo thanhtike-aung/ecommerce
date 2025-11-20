@@ -15,6 +15,22 @@ use Illuminate\Validation\ValidationException;
 class NewPasswordController extends Controller
 {
     /**
+     * Display the password reset view.
+     */
+    public function create(Request $request, string $token)
+    {
+        // Determine if this is an admin or customer request based on the route
+        $routeName = $request->route()->getName();
+
+        if ($routeName === 'admin.password.reset') {
+            return view('auth.admin.reset-password', ['token' => $token]);
+        }
+
+        // Default to customer reset password - use existing view
+        return view('auth.reset-password', ['token' => $token]);
+    }
+
+    /**
      * Handle an incoming new password request.
      *
      * @throws \Illuminate\Validation\ValidationException
