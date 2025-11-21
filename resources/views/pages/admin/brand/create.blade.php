@@ -1,51 +1,7 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('title', 'Create Brand - ShopZone')
 
-@section('navigation')
-<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
-    <div class="container">
-        <a class="navbar-brand" href="{{ route('dashboard') }}">
-            <i class="bi bi-shop text-primary"></i> ShopZone
-        </a>
-
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav me-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('dashboard') }}">Dashboard</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Products</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" href="{{ route('brand.index') }}">Brands</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Orders</a>
-                </li>
-            </ul>
-
-            <ul class="navbar-nav">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                        <i class="bi bi-person-circle"></i> Admin
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Profile</a></li>
-                        <li><a class="dropdown-item" href="#">Settings</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#" onclick="logout()">Logout</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
-@endsection
 
 @section('content')
 <div class="container mt-4">
@@ -58,7 +14,7 @@
                     <p class="text-muted mb-0">Add a new brand to organize your products</p>
                 </div>
                 <div>
-                    <a href="{{ route('brand.index') }}" class="btn btn-outline-secondary">
+                    <a href="{{ route('admin.brand.index') }}" class="btn btn-outline-secondary">
                         <i class="bi bi-arrow-left me-2"></i>Back to Brands
                     </a>
                 </div>
@@ -76,7 +32,7 @@
                     </h5>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('brand.store') }}" method="POST" enctype="multipart/form-data" id="brandForm">
+                    <form action="{{ route('admin.brand.store') }}" method="POST" enctype="multipart/form-data" id="brandForm">
                         @csrf
 
                         <div class="row">
@@ -162,7 +118,7 @@
                                 <span class="spinner-border spinner-border-sm d-none me-2"></span>
                                 <i class="bi bi-check-circle me-2"></i>Create Brand
                             </button>
-                            <a href="{{ route('brand.index') }}" class="btn btn-outline-secondary">
+                            <a href="{{ route('admin.brand.index') }}" class="btn btn-outline-secondary">
                                 <i class="bi bi-x-circle me-2"></i>Cancel
                             </a>
                         </div>

@@ -7,6 +7,7 @@ use App\Repositories\Admin\BrandRepository;
 use App\Repositories\Admin\BrandRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class BrandService implements BrandServiceInterface
 {
@@ -27,6 +28,11 @@ class BrandService implements BrandServiceInterface
 
     public function create(array $data): Model
     {
+        if (isset($data['thumbnail']) && $data['thumbnail']) {
+            $path = $data['thumbnail']->store('brands', 'images');
+            $data['thumbnail'] = $path;
+        }
+
         return $this->brandRepositoryInterface->create($data);
     }
 
@@ -40,6 +46,7 @@ class BrandService implements BrandServiceInterface
     public function delete(int $id): void
     {
         $brand = $this->brandRepositoryInterface->getById($id);
+        dd($brand);
         $brand->delete();
     }
 }

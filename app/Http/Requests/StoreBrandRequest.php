@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreBrandRequest extends FormRequest
 {
@@ -11,7 +12,7 @@ class StoreBrandRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +23,13 @@ class StoreBrandRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => 'required|string|max:255',
+            'slug' => 'required|string|max:255|unique:brands,slug',
+            'description' => 'nullable|string',
+            'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'status' => 'required|boolean',
+            'sort' => 'nullable|integer|min:0',
+            'featured' => 'nullable|boolean'
         ];
     }
 }

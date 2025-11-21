@@ -1,51 +1,7 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('title', 'Brand Management - ShopZone')
 
-@section('navigation')
-<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
-    <div class="container">
-        <a class="navbar-brand" href="#">
-            <i class="bi bi-shop text-primary"></i> ShopZone
-        </a>
-
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav me-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Dashboard</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Products</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" href="#">Brands</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Orders</a>
-                </li>
-            </ul>
-
-            <ul class="navbar-nav">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                        <i class="bi bi-person-circle"></i> Admin
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Profile</a></li>
-                        <li><a class="dropdown-item" href="#">Settings</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#" onclick="logout()">Logout</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
-@endsection
 
 @section('content')
 <div class="container mt-4">
@@ -58,7 +14,7 @@
                     <p class="text-muted mb-0">Manage your product brands and their information</p>
                 </div>
                 <div>
-                    <a href="{{ route('brand.create') }}" class="btn btn-primary">
+                    <a href="{{ route('admin.brand.create') }}" class="btn btn-primary">
                         <i class="bi bi-plus-circle me-2"></i>Add New Brand
                     </a>
                 </div>
@@ -191,7 +147,7 @@
                                         <td>{{ $index + 1 }}</td>
                                         <td>
                                             @if($brand->thumbnail)
-                                                <img src="{{ asset('storage/' . $brand->thumbnail) }}" alt="{{ $brand->name }}" class="rounded" style="width: 50px; height: 50px; object-fit: cover;">
+                                                <img src="{{ asset('storage/images/' . $brand->thumbnail) }}" alt="{{ $brand->name }}" class="rounded" style="width: 50px; height: 50px; object-fit: cover;">
                                             @else
                                                 <div class="bg-light rounded d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
                                                     <i class="bi bi-image text-muted"></i>
@@ -227,11 +183,11 @@
                                             <span class="badge bg-info">{{ $brand->products->count() }}</span>
                                         </td>
                                         <td>
-                                            <div class="btn-group btn-group-sm" role="group">
+                                            <div class="btn-group btn-group-sm gap-2" role="group">
                                                 <button type="button" class="btn btn-outline-primary" onclick="viewBrand({{ $brand->id }})" title="View">
                                                     <i class="bi bi-eye"></i>
                                                 </button>
-                                                <a href="{{ route('brand.edit', $brand->id) }}" class="btn btn-outline-warning" title="Edit">
+                                                <a href="{{ route('admin.brand.edit', $brand->id) }}" class="btn btn-outline-warning" title="Edit">
                                                     <i class="bi bi-pencil"></i>
                                                 </a>
                                                 <button type="button" class="btn btn-outline-danger" onclick="deleteBrand({{ $brand->id }})" title="Delete">
@@ -253,7 +209,7 @@
                                     <div class="card h-100">
                                         <div class="position-relative">
                                             @if($brand->thumbnail)
-                                                <img src="{{ asset('storage/' . $brand->thumbnail) }}" class="card-img-top" alt="{{ $brand->name }}" style="height: 200px; object-fit: cover;">
+                                                <img src="{{ asset('storage/images/' . $brand->thumbnail) }}" class="card-img-top" alt="{{ $brand->name }}" style="height: 200px; object-fit: cover;">
                                             @else
                                                 <div class="bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
                                                     <i class="bi bi-image text-muted" style="font-size: 3rem;"></i>
@@ -282,11 +238,11 @@
                                                 <small class="text-muted">
                                                     <i class="bi bi-box-seam me-1"></i>{{ $brand->products->count() }} Products
                                                 </small>
-                                                <div class="btn-group btn-group-sm">
+                                                <div class="btn-group btn-group-sm gap-2">
                                                     <button type="button" class="btn btn-outline-primary" onclick="viewBrand({{ $brand->id }})" title="View">
                                                         <i class="bi bi-eye"></i>
                                                     </button>
-                                                    <a href="{{ route('brand.edit', $brand->id) }}" class="btn btn-outline-warning" title="Edit">
+                                                    <a href="{{ route('admin.brand.edit', $brand->id) }}" class="btn btn-outline-warning" title="Edit">
                                                         <i class="bi bi-pencil"></i>
                                                     </a>
                                                     <button type="button" class="btn btn-outline-danger" onclick="deleteBrand({{ $brand->id }})" title="Delete">
@@ -306,7 +262,7 @@
                             <i class="bi bi-tags text-muted" style="font-size: 4rem;"></i>
                             <h4 class="mt-3 text-muted">No Brands Found</h4>
                             <p class="text-muted">Start by creating your first brand to organize your products.</p>
-                            <a href="{{ route('brand.create') }}" class="btn btn-primary">
+                            <a href="{{ route('admin.brand.create') }}" class="btn btn-primary">
                                 <i class="bi bi-plus-circle me-2"></i>Create First Brand
                             </a>
                         </div>
@@ -488,7 +444,7 @@ function viewBrand(brandId) {
     modal.show();
 
     // Load brand details via AJAX
-    $.get(`/brand/${brandId}`)
+    $.get(`/admin/brand/${brandId}`)
         .done(function(response) {
             $('#brandModalBody').html(response);
         })
@@ -515,24 +471,28 @@ $('#confirmDelete').on('click', function() {
 
         // Send delete request
         $.ajax({
-            url: `/brand/${brandToDelete}`,
-            type: 'DELETE',
+            url: `/admin/brand/delete/${brandToDelete}`,
+            method: 'DELETE',
+            contentType: 'application/json',
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        })
-        .done(function(response) {
-            $('#deleteModal').modal('hide');
-            showToast('Brand deleted successfully!', 'success');
+            },
+            data: {
+                id: brandToDelete
+            },
+            success: function(response) {
+                $('#deleteModal').modal('hide');
+                showToast('Brand deleted successfully!', 'success');
 
             // Remove from table/grid
             $(`tr[data-brand-id="${brandToDelete}"], .brand-card[data-brand-id="${brandToDelete}"]`).fadeOut(function() {
                 $(this).remove();
                 updateStatistics();
             });
-        })
-        .fail(function(xhr) {
+        },
+        error: function(xhr) {
             showToast('Failed to delete brand. Please try again.', 'danger');
+        }
         })
         .always(function() {
             $('#confirmDelete').prop('disabled', false).html('Delete Brand');
@@ -542,8 +502,7 @@ $('#confirmDelete').on('click', function() {
 });
 
 function updateStatistics() {
-    // Recalculate and update statistics
-    location.reload(); // Simple approach, could be optimized with AJAX
+    location.reload();
 }
 
 function logout() {
