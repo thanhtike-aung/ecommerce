@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateBrandRequest extends FormRequest
 {
@@ -11,7 +12,7 @@ class UpdateBrandRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,8 +22,24 @@ class UpdateBrandRequest extends FormRequest
      */
     public function rules(): array
     {
+        $brand = $this->route('brand');
+
         return [
-            //
+            'name' => [
+                'required',
+                Rule::unique('brands', 'name')->ignore($brand->id)->whereNull('deleted_at'),
+                'max:255'
+            ],
+            'slug' => [
+                'required',
+                Rule::unique('brands', 'slug')->ignore($brand->id)->whereNull('deleted_at'),
+                'max:255'
+            ],
+            'description' => 'nullable|string',
+            'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'status' => 'required|boolean',
+            'featured' => 'boolean',
+            'sort' => 'nullable|integer|min:0'
         ];
     }
 }

@@ -42,7 +42,55 @@
                 <div class="card-body">
                     <p>From your account dashboard you can view your recent orders, manage your shipping and billing addresses, and edit your password and account details.</p>
 
+                    <!-- Order Statistics -->
                     <div class="row mt-4">
+                        <div class="col-md-3">
+                            <div class="card mb-4 bg-primary text-white">
+                                <div class="card-body text-center">
+                                    <h3 class="mb-0">{{ $totalOrders }}</h3>
+                                    <p class="mb-0">Total Orders</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card mb-4 bg-warning text-dark">
+                                <div class="card-body text-center">
+                                    <h3 class="mb-0">{{ $pendingOrders }}</h3>
+                                    <p class="mb-0">Pending</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card mb-4 bg-info text-white">
+                                <div class="card-body text-center">
+                                    <h3 class="mb-0">{{ $processingOrders }}</h3>
+                                    <p class="mb-0">Processing</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card mb-4 bg-success text-white">
+                                <div class="card-body text-center">
+                                    <h3 class="mb-0">{{ $completedOrders }}</h3>
+                                    <p class="mb-0">Completed</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Total Spent -->
+                    <div class="card mb-4 bg-light">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Total Spent</h5>
+                                <h4 class="mb-0 text-primary">${{ number_format($totalSpent, 2) }}</h4>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Links -->
+                    <h5 class="mb-3">Quick Links</h5>
+                    <div class="row">
                         <div class="col-md-4">
                             <div class="card mb-4">
                                 <div class="card-body text-center">
@@ -75,6 +123,51 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+
+                    <!-- Recent Orders -->
+                    <h5 class="mb-3">Recent Orders</h5>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Order #</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Total</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse($recentOrders as $order)
+                                <tr>
+                                    <td>{{ $order->order_number }}</td>
+                                    <td>{{ $order->created_at->format('M d, Y') }}</td>
+                                    <td>
+                                        @if($order->status == 'pending')
+                                            <span class="badge bg-warning">Pending</span>
+                                        @elseif($order->status == 'processing')
+                                            <span class="badge bg-info">Processing</span>
+                                        @elseif($order->status == 'completed')
+                                            <span class="badge bg-success">Completed</span>
+                                        @elseif($order->status == 'cancelled')
+                                            <span class="badge bg-danger">Cancelled</span>
+                                        @else
+                                            <span class="badge bg-secondary">{{ $order->status }}</span>
+                                        @endif
+                                    </td>
+                                    <td>${{ number_format($order->total_amount, 2) }}</td>
+                                    <td>
+                                        <a href="#" class="btn btn-sm btn-outline-primary">View</a>
+                                    </td>
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td colspan="5" class="text-center">No orders found</td>
+                                </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>

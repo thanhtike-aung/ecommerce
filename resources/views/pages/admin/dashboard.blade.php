@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Admin Dashboard')
+@section('title', 'Admin Dashboard - Nexwear')
 
 @section('content')
 <div class="row">
@@ -21,14 +21,14 @@
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <div>
                         <h6 class="text-muted mb-1">Total Orders</h6>
-                        <h3 class="mb-0">124</h3>
+                        <h3 class="mb-0">{{ $totalOrders }}</h3>
                     </div>
                     <div class="bg-light-primary rounded-circle p-2">
                         <i class="bi bi-cart3 text-primary fs-4"></i>
                     </div>
                 </div>
                 <div class="d-flex align-items-center">
-                    <span class="badge bg-success me-2">+12%</span>
+                    <span class="badge {{ $orderGrowth >= 0 ? 'bg-success' : 'bg-danger' }} me-2">{{ $orderGrowth >= 0 ? '+' : '' }}{{ $orderGrowth }}%</span>
                     <small class="text-muted">Since last month</small>
                 </div>
             </div>
@@ -41,14 +41,14 @@
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <div>
                         <h6 class="text-muted mb-1">Total Revenue</h6>
-                        <h3 class="mb-0">$12,426</h3>
+                        <h3 class="mb-0">${{ number_format($totalRevenue, 2) }}</h3>
                     </div>
                     <div class="bg-light-primary rounded-circle p-2">
                         <i class="bi bi-currency-dollar text-primary fs-4"></i>
                     </div>
                 </div>
                 <div class="d-flex align-items-center">
-                    <span class="badge bg-success me-2">+8%</span>
+                    <span class="badge {{ $revenueGrowth >= 0 ? 'bg-success' : 'bg-danger' }} me-2">{{ $revenueGrowth >= 0 ? '+' : '' }}{{ $revenueGrowth }}%</span>
                     <small class="text-muted">Since last month</small>
                 </div>
             </div>
@@ -61,14 +61,14 @@
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <div>
                         <h6 class="text-muted mb-1">Total Products</h6>
-                        <h3 class="mb-0">85</h3>
+                        <h3 class="mb-0">{{ $totalProducts }}</h3>
                     </div>
                     <div class="bg-light-primary rounded-circle p-2">
                         <i class="bi bi-box-seam text-primary fs-4"></i>
                     </div>
                 </div>
                 <div class="d-flex align-items-center">
-                    <span class="badge bg-success me-2">+24%</span>
+                    <span class="badge {{ $productGrowth >= 0 ? 'bg-success' : 'bg-danger' }} me-2">{{ $productGrowth >= 0 ? '+' : '' }}{{ $productGrowth }}%</span>
                     <small class="text-muted">Since last month</small>
                 </div>
             </div>
@@ -81,14 +81,14 @@
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <div>
                         <h6 class="text-muted mb-1">Total Customers</h6>
-                        <h3 class="mb-0">248</h3>
+                        <h3 class="mb-0">{{ $totalCustomers }}</h3>
                     </div>
                     <div class="bg-light-primary rounded-circle p-2">
                         <i class="bi bi-people text-primary fs-4"></i>
                     </div>
                 </div>
                 <div class="d-flex align-items-center">
-                    <span class="badge bg-success me-2">+18%</span>
+                    <span class="badge {{ $customerGrowth >= 0 ? 'bg-success' : 'bg-danger' }} me-2">{{ $customerGrowth >= 0 ? '+' : '' }}{{ $customerGrowth }}%</span>
                     <small class="text-muted">Since last month</small>
                 </div>
             </div>
@@ -101,7 +101,7 @@
         <div class="card">
             <div class="card-header bg-white d-flex justify-content-between align-items-center">
                 <h5 class="mb-0">Recent Orders</h5>
-                <a href="#" class="btn btn-sm btn-outline-primary">View All</a>
+                <a href="{{ route('admin.order.index') }}" class="btn btn-sm btn-outline-primary">View All</a>
             </div>
             <div class="card-body p-0">
                 <div class="table-responsive">
@@ -113,44 +113,34 @@
                                 <th>Date</th>
                                 <th>Amount</th>
                                 <th>Status</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
+                            @forelse($recentOrders as $order)
                             <tr>
-                                <td>#ORD-001</td>
-                                <td>John Doe</td>
-                                <td>Nov 20, 2023</td>
-                                <td>$125.00</td>
-                                <td><span class="badge bg-success">Completed</span></td>
+                                <td>{{ $order->order_number }}</td>
+                                <td>{{ $order->user ? $order->user->name : 'Guest' }}</td>
+                                <td>{{ $order->created_at->format('M d, Y') }}</td>
+                                <td>${{ number_format($order->total_amount, 2) }}</td>
+                                <td>
+                                    <span class="badge {{
+                                        $order->status == 'completed' ? 'bg-success' :
+                                        ($order->status == 'processing' ? 'bg-warning text-dark' :
+                                        ($order->status == 'cancelled' ? 'bg-danger' : 'bg-secondary'))
+                                    }}">{{ ucfirst($order->status) }}</span>
+                                </td>
+                                <td>
+                                    <a href="{{ route('admin.order.show', $order->id) }}" class="btn btn-sm btn-outline-primary">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                </td>
                             </tr>
+                            @empty
                             <tr>
-                                <td>#ORD-002</td>
-                                <td>Jane Smith</td>
-                                <td>Nov 19, 2023</td>
-                                <td>$245.99</td>
-                                <td><span class="badge bg-warning text-dark">Processing</span></td>
+                                <td colspan="6" class="text-center">No orders found</td>
                             </tr>
-                            <tr>
-                                <td>#ORD-003</td>
-                                <td>Robert Johnson</td>
-                                <td>Nov 18, 2023</td>
-                                <td>$82.50</td>
-                                <td><span class="badge bg-success">Completed</span></td>
-                            </tr>
-                            <tr>
-                                <td>#ORD-004</td>
-                                <td>Emily Wilson</td>
-                                <td>Nov 18, 2023</td>
-                                <td>$189.75</td>
-                                <td><span class="badge bg-danger">Cancelled</span></td>
-                            </tr>
-                            <tr>
-                                <td>#ORD-005</td>
-                                <td>Michael Brown</td>
-                                <td>Nov 17, 2023</td>
-                                <td>$315.25</td>
-                                <td><span class="badge bg-warning text-dark">Processing</span></td>
-                            </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
@@ -160,62 +150,71 @@
 
     <div class="col-md-4 mb-4">
         <div class="card">
-            <div class="card-header bg-white">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center">
                 <h5 class="mb-0">Top Selling Products</h5>
+                <a href="{{ route('admin.product.index') }}" class="btn btn-sm btn-outline-primary">View All</a>
             </div>
             <div class="card-body">
                 <ul class="list-group list-group-flush">
+                    @forelse($topSellingProducts as $product)
                     <li class="list-group-item px-0 d-flex justify-content-between align-items-center">
                         <div class="d-flex align-items-center">
-                            <div class="bg-light rounded me-3" style="width: 40px; height: 40px;"></div>
+                            @if($product->thumbnail)
+                            <div class="me-3" style="width: 40px; height: 40px;">
+                                <img src="{{ asset('storage/images/' . $product->thumbnail) }}" alt="{{ $product->name }}" class="img-fluid rounded" style="width: 40px; height: 40px; object-fit: cover;">
+                            </div>
+                            @else
+                            <div class="bg-light rounded me-3 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                <i class="bi bi-box-seam text-muted"></i>
+                            </div>
+                            @endif
                             <div>
-                                <h6 class="mb-0">Smartphone X Pro</h6>
-                                <small class="text-muted">Electronics</small>
+                                <h6 class="mb-0"><a href="{{ route('admin.product.edit', $product->id) }}" class="text-decoration-none">{{ $product->name }}</a></h6>
+                                <small class="text-muted">{{ $product->category ? $product->category->name : 'Uncategorized' }}</small>
                             </div>
                         </div>
-                        <span class="badge bg-primary rounded-pill">42</span>
+                        <span class="badge bg-primary rounded-pill">{{ $product->total_quantity }}</span>
                     </li>
-                    <li class="list-group-item px-0 d-flex justify-content-between align-items-center">
-                        <div class="d-flex align-items-center">
-                            <div class="bg-light rounded me-3" style="width: 40px; height: 40px;"></div>
-                            <div>
-                                <h6 class="mb-0">Wireless Earbuds</h6>
-                                <small class="text-muted">Electronics</small>
-                            </div>
-                        </div>
-                        <span class="badge bg-primary rounded-pill">38</span>
+                    @empty
+                    <li class="list-group-item px-0 text-center">
+                        <p class="mb-0">No products found</p>
                     </li>
-                    <li class="list-group-item px-0 d-flex justify-content-between align-items-center">
-                        <div class="d-flex align-items-center">
-                            <div class="bg-light rounded me-3" style="width: 40px; height: 40px;"></div>
-                            <div>
-                                <h6 class="mb-0">Designer Watch</h6>
-                                <small class="text-muted">Fashion</small>
-                            </div>
-                        </div>
-                        <span class="badge bg-primary rounded-pill">29</span>
-                    </li>
-                    <li class="list-group-item px-0 d-flex justify-content-between align-items-center">
-                        <div class="d-flex align-items-center">
-                            <div class="bg-light rounded me-3" style="width: 40px; height: 40px;"></div>
-                            <div>
-                                <h6 class="mb-0">Leather Backpack</h6>
-                                <small class="text-muted">Fashion</small>
-                            </div>
-                        </div>
-                        <span class="badge bg-primary rounded-pill">24</span>
-                    </li>
-                    <li class="list-group-item px-0 d-flex justify-content-between align-items-center">
-                        <div class="d-flex align-items-center">
-                            <div class="bg-light rounded me-3" style="width: 40px; height: 40px;"></div>
-                            <div>
-                                <h6 class="mb-0">Smart Home Hub</h6>
-                                <small class="text-muted">Electronics</small>
-                            </div>
-                        </div>
-                        <span class="badge bg-primary rounded-pill">19</span>
-                    </li>
+                    @endforelse
                 </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12 mb-4">
+        <div class="card">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">Quick Actions</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        <a href="{{ route('admin.product.create') }}" class="btn btn-primary w-100">
+                            <i class="bi bi-plus-circle me-2"></i>Add Product
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <a href="{{ route('admin.order.create') }}" class="btn btn-outline-primary w-100">
+                            <i class="bi bi-cart-plus me-2"></i>Create Order
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <a href="{{ route('admin.customer.create') }}" class="btn btn-outline-primary w-100">
+                            <i class="bi bi-person-plus me-2"></i>Add Customer
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <a href="{{ route('admin.settings.general') }}" class="btn btn-outline-primary w-100">
+                            <i class="bi bi-gear me-2"></i>Settings
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -225,7 +224,10 @@
 @push('scripts')
 <script>
 $(document).ready(function() {
-    // Admin dashboard specific scripts can go here
+    // Show welcome message
+    setTimeout(() => {
+        showToast('Welcome to Nexwear Admin Dashboard!', 'success');
+    }, 1000);
 });
 </script>
 @endpush

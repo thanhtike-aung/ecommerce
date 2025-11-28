@@ -14,7 +14,7 @@
                     <p class="text-muted mb-0">Manage your product brands and their information</p>
                 </div>
                 <div>
-                    <a href="{{ route('admin.brand.create') }}" class="btn btn-primary">
+                    <a href="/admin/brand/create" class="btn btn-primary">
                         <i class="bi bi-plus-circle me-2"></i>Add New Brand
                     </a>
                 </div>
@@ -143,7 +143,7 @@
                                 </thead>
                                 <tbody id="brandsTableBody">
                                     @foreach($brands as $index => $brand)
-                                    <tr data-status="{{ $brand->status }}" data-featured="{{ $brand->featured }}" data-name="{{ strtolower($brand->name) }}" data-description="{{ strtolower($brand->description ?? '') }}">
+                                    <tr data-brand-id="{{ $brand->id }}" data-status="{{ $brand->status }}" data-featured="{{ $brand->featured }}" data-name="{{ strtolower($brand->name) }}" data-description="{{ strtolower($brand->description ?? '') }}">
                                         <td>{{ $index + 1 }}</td>
                                         <td>
                                             @if($brand->thumbnail)
@@ -205,7 +205,7 @@
                         <div id="gridView" class="d-none">
                             <div class="row" id="brandsGridBody">
                                 @foreach($brands as $brand)
-                                <div class="col-md-6 col-lg-4 mb-4 brand-card" data-status="{{ $brand->status }}" data-featured="{{ $brand->featured }}" data-name="{{ strtolower($brand->name) }}" data-description="{{ strtolower($brand->description ?? '') }}">
+                                <div class="col-md-6 col-lg-4 mb-4 brand-card" data-brand-id="{{ $brand->id }}" data-status="{{ $brand->status }}" data-featured="{{ $brand->featured }}" data-name="{{ strtolower($brand->name) }}" data-description="{{ strtolower($brand->description ?? '') }}">
                                     <div class="card h-100">
                                         <div class="position-relative">
                                             @if($brand->thumbnail)
@@ -446,7 +446,68 @@ function viewBrand(brandId) {
     // Load brand details via AJAX
     $.get(`/admin/brand/${brandId}`)
         .done(function(response) {
-            $('#brandModalBody').html(response);
+            // Format the created_at and updated_at dates
+            const createdDate = new Date(response.created_at).toLocaleString();
+            const updatedDate = new Date(response.updated_at).toLocaleString();
+
+            // Build the HTML content for the modal
+            let html = `
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="text-center mb-4">
+                            ${response.thumbnail
+                                ? `<img src="/storage/images/${response.thumbnail}" class="img-fluid rounded" alt="${response.name}" style="max-height: 250px;">`
+                                : `<div class="bg-light rounded d-flex align-items-center justify-content-center" style="height: 250px;">
+                                    <i class="bi bi-image text-muted" style="font-size: 4rem;"></i>
+                                  </div>`
+                            }
+                        </div>
+                    </div>
+
+                    <div class="col-md-7">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h3>${response.name}</h3>
+                            <div>
+                                ${response.status == 1
+                                    ? '<span class="badge bg-success">Active</span>'
+                                    : '<span class="badge bg-danger">Inactive</span>'
+                                }
+                                ${response.featured == 1
+                                    ? '<span class="badge bg-warning ms-2">Featured</span>'
+                                    : ''
+                                }
+                            </div>
+                        </div>
+
+                        <p class="text-muted mb-4">${response.description || 'No description available'}</p>
+
+                        <div class="mb-4">
+                            <h5 class="border-bottom pb-2">Brand Information</h5>
+                            <div class="row">
+                                <div class="col-md-6 mb-2">
+                                    <small class="text-muted d-block">Slug</small>
+                                    <span>${response.slug}</span>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <small class="text-muted d-block">Products</small>
+                                    <span>${response.products ? response.products.length : 0} products</span>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <small class="text-muted d-block">Created</small>
+                                    <span>${createdDate}</span>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <small class="text-muted d-block">Last Updated</small>
+                                    <span>${updatedDate}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Update the modal content
+            $('#brandModalBody').html(html);
         })
         .fail(function() {
             $('#brandModalBody').html(`
@@ -472,7 +533,7 @@ $('#confirmDelete').on('click', function() {
         // Send delete request
         $.ajax({
             url: `/admin/brand/delete/${brandToDelete}`,
-            method: 'DELETE',
+            method: 'POST',
             contentType: 'application/json',
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -487,7 +548,7 @@ $('#confirmDelete').on('click', function() {
             // Remove from table/grid
             $(`tr[data-brand-id="${brandToDelete}"], .brand-card[data-brand-id="${brandToDelete}"]`).fadeOut(function() {
                 $(this).remove();
-                updateStatistics();
+                // updateStatistics();
             });
         },
         error: function(xhr) {

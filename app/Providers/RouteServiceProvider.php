@@ -46,7 +46,6 @@ class RouteServiceProvider extends ServiceProvider
 
             // Customer Routes
             Route::middleware('web')
-                ->prefix('customer')
                 ->group(base_path('routes/customer.php'));
 
             // Customer Auth Routes

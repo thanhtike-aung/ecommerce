@@ -66,7 +66,7 @@
                     <div class="card border-0 shadow-sm h-100 brand-card-featured">
                         <div class="position-relative">
                             @if($brand->thumbnail)
-                                <img src="{{ asset($brand->thumbnail) }}"
+                                <img src="{{ asset('storage/images/' . $brand->thumbnail) }}"
                                      class="card-img-top" alt="{{ $brand->name }}"
                                      style="height: 200px; object-fit: cover;">
                             @else
@@ -120,7 +120,7 @@
             <div class="card border-0 shadow-sm h-100 brand-card">
                 <div class="position-relative">
                     @if($brand->thumbnail)
-                        <img src="{{ asset($brand->thumbnail) }}"
+                        <img src="{{ asset('storage/images/' . $brand->thumbnail) }}"
                              class="card-img-top" alt="{{ $brand->name }}"
                              style="height: 180px; object-fit: cover;">
                     @else
@@ -172,7 +172,7 @@
             <div class="row g-0">
                 <div class="col-md-3">
                     @if($brand->thumbnail)
-                        <img src="{{ asset($brand->thumbnail) }}"
+                        <img src="{{ asset('storage/images/' . $brand->thumbnail) }}"
                              class="img-fluid rounded-start h-100" alt="{{ $brand->name }}"
                              style="object-fit: cover; min-height: 150px;">
                     @else

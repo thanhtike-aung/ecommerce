@@ -213,19 +213,19 @@
         <div class="row">
             <div class="col-md-3 col-6">
                 <div class="stat-card">
-                    <div class="stat-number">10K+</div>
+                    <div class="stat-number">{{ App\Models\User::where('role', 'customer')->count() }}+</div>
                     <div class="stat-label">Happy Customers</div>
                 </div>
             </div>
             <div class="col-md-3 col-6">
                 <div class="stat-card">
-                    <div class="stat-number">5K+</div>
+                    <div class="stat-number">{{ $productCount }}+</div>
                     <div class="stat-label">Products</div>
                 </div>
             </div>
             <div class="col-md-3 col-6">
                 <div class="stat-card">
-                    <div class="stat-number">50+</div>
+                    <div class="stat-number">{{ $categoryCount }}+</div>
                     <div class="stat-label">Categories</div>
                 </div>
             </div>
@@ -244,6 +244,19 @@
     <div class="container">
         <h2 class="section-title">Shop by Category</h2>
         <div class="row g-4">
+            @forelse($featuredCategories as $category)
+            <div class="col-md-4">
+                <div class="category-card" @if($category->thumbnail) style="background-image: url('{{ asset($category->thumbnail) }}');" @else style="background-image: linear-gradient(45deg, #667eea, #764ba2);" @endif>
+                    <div class="category-overlay">
+                        <div>
+                            <i class="bi bi-grid" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                            <h4>{{ $category->name }}</h4>
+                            <p>{{ Str::limit($category->description, 30) }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @empty
             <div class="col-md-4">
                 <div class="category-card" style="background-image: linear-gradient(45deg, #667eea, #764ba2);">
                     <div class="category-overlay">
@@ -277,6 +290,7 @@
                     </div>
                 </div>
             </div>
+            @endforelse
         </div>
     </div>
 </section>
@@ -286,6 +300,34 @@
     <div class="container">
         <h2 class="section-title">Featured Products</h2>
         <div class="row g-4">
+            @forelse($featuredProducts as $product)
+            <div class="col-lg-3 col-md-6">
+                <div class="card product-card">
+                    <div class="product-image">
+                        @if($product->thumbnail)
+                            <img src="{{ asset($product->thumbnail) }}" alt="{{ $product->name }}" class="img-fluid">
+                        @else
+                            <i class="bi bi-box"></i>
+                        @endif
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ $product->name }}</h5>
+                        <p class="card-text text-muted">{{ Str::limit($product->short_description, 50) }}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            @if($product->isOnSale())
+                                <div>
+                                    <span class="h5 text-primary mb-0">${{ number_format($product->sale_price, 2) }}</span>
+                                    <small class="text-muted text-decoration-line-through">${{ number_format($product->price, 2) }}</small>
+                                </div>
+                            @else
+                                <span class="h5 text-primary mb-0">${{ number_format($product->price, 2) }}</span>
+                            @endif
+                            <button class="btn btn-outline-primary btn-sm add-to-cart" data-product-id="{{ $product->id }}">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @empty
             <div class="col-lg-3 col-md-6">
                 <div class="card product-card">
                     <div class="product-image">
@@ -346,9 +388,82 @@
                     </div>
                 </div>
             </div>
+            @endforelse
         </div>
         <div class="text-center mt-5">
             <a href="#" class="btn btn-primary btn-lg">View All Products</a>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Brands -->
+<section id="brands" class="section-padding bg-white">
+    <div class="container">
+        <h2 class="section-title">Our Trusted Brands</h2>
+        <div class="row g-4">
+            @forelse($featuredBrands as $brand)
+            <div class="col-md-2 col-4">
+                <div class="card h-100 border-0 text-center">
+                    <div class="card-body">
+                        @if($brand->thumbnail)
+                            <img src="{{ asset($brand->thumbnail) }}" alt="{{ $brand->name }}" class="img-fluid mb-3" style="max-height: 80px;">
+                        @else
+                            <i class="bi bi-award" style="font-size: 3rem; color: #667eea;"></i>
+                        @endif
+                        <h6>{{ $brand->name }}</h6>
+                    </div>
+                </div>
+            </div>
+            @empty
+            <div class="col-md-2 col-4">
+                <div class="card h-100 border-0 text-center">
+                    <div class="card-body">
+                        <i class="bi bi-apple" style="font-size: 3rem; color: #667eea;"></i>
+                        <h6>Apple</h6>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2 col-4">
+                <div class="card h-100 border-0 text-center">
+                    <div class="card-body">
+                        <i class="bi bi-microsoft" style="font-size: 3rem; color: #667eea;"></i>
+                        <h6>Microsoft</h6>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2 col-4">
+                <div class="card h-100 border-0 text-center">
+                    <div class="card-body">
+                        <i class="bi bi-google" style="font-size: 3rem; color: #667eea;"></i>
+                        <h6>Google</h6>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2 col-4">
+                <div class="card h-100 border-0 text-center">
+                    <div class="card-body">
+                        <i class="bi bi-playstation" style="font-size: 3rem; color: #667eea;"></i>
+                        <h6>Sony</h6>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2 col-4">
+                <div class="card h-100 border-0 text-center">
+                    <div class="card-body">
+                        <i class="bi bi-nintendo-switch" style="font-size: 3rem; color: #667eea;"></i>
+                        <h6>Nintendo</h6>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2 col-4">
+                <div class="card h-100 border-0 text-center">
+                    <div class="card-body">
+                        <i class="bi bi-samsung" style="font-size: 3rem; color: #667eea;"></i>
+                        <h6>Samsung</h6>
+                    </div>
+                </div>
+            </div>
+            @endforelse
         </div>
     </div>
 </section>

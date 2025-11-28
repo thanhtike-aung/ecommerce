@@ -39,6 +39,12 @@ class BrandService implements BrandServiceInterface
     public function update(int $id, array $data): Model
     {
         $brand = $this->brandRepositoryInterface->getById($id);
+
+        // If there's a new thumbnail, delete the old one if it exists
+        if (isset($data['thumbnail']) && $brand->thumbnail) {
+            Storage::disk('images')->delete($brand->thumbnail);
+        }
+
         $brand->update($data);
         return $brand;
     }
@@ -46,7 +52,12 @@ class BrandService implements BrandServiceInterface
     public function delete(int $id): void
     {
         $brand = $this->brandRepositoryInterface->getById($id);
-        dd($brand);
+
+        // Delete the brand's thumbnail if it exists
+        if ($brand->thumbnail) {
+            Storage::disk('images')->delete($brand->thumbnail);
+        }
+
         $brand->delete();
     }
 }

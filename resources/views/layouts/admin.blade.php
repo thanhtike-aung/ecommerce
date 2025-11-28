@@ -185,8 +185,8 @@
         <nav id="sidebar">
             <div class="sidebar-header">
                 <a href="{{ route('admin.dashboard') }}" class="d-flex align-items-center text-decoration-none">
-                    <i class="bi bi-shop text-primary me-2"></i>
-                    <span class="fs-4 fw-bold">ShopZone Admin</span>
+                    <i class="bi bi-shop text-primary me-4"></i>
+                    <span class="fs-4 fw-bold">Nexwear Management</span>
                 </a>
             </div>
 
@@ -346,6 +346,9 @@
         </div>
     </div>
 
+    <!-- Toast Container -->
+    <div id="toast-container" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11"></div>
+
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
@@ -371,7 +374,49 @@
                     $('.sidebar-footer').show();
                 }
             });
+
+            // Toast container is already in the HTML
         });
+
+        // Global utility functions
+        window.showLoading = function(element) {
+            $(element).prop('disabled', true);
+            $(element).find('.spinner-border').removeClass('d-none');
+        };
+
+        window.hideLoading = function(element) {
+            $(element).prop('disabled', false);
+            $(element).find('.spinner-border').addClass('d-none');
+        };
+
+        // Global toast notification function
+        window.showToast = function(message, type = 'success') {
+            const toastHtml = `
+                <div class="toast align-items-center text-white bg-${type} border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            ${message}
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                    </div>
+                </div>
+            `;
+
+            const $toast = $(toastHtml);
+            $('#toast-container').append($toast);
+
+            const toast = new bootstrap.Toast($toast[0], {
+                autohide: true,
+                delay: 3000
+            });
+
+            toast.show();
+
+            // Remove toast from DOM after it's hidden
+            $toast.on('hidden.bs.toast', function() {
+                $(this).remove();
+            });
+        };
     </script>
 
     @stack('scripts')

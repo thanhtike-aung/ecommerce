@@ -32,6 +32,7 @@ class BrandController extends Controller
      */
     public function create()
     {
+        info("this?");
         return view('pages.admin.brand.create');
     }
 
@@ -49,7 +50,8 @@ class BrandController extends Controller
      */
     public function show(Brand $brand)
     {
-        return view('pages.admin.brand.show', compact('brand'));
+        $brand = $this->brandServiceInterface->getById($brand->id);
+        return response()->json($brand);
     }
 
     /**
@@ -65,14 +67,19 @@ class BrandController extends Controller
      */
     public function update(UpdateBrandRequest $request, Brand $brand)
     {
-        $validatedData = $request->validated([
-            'slug' => 'required', Rule::unique('brands', 'slug')->whereNull('deleted_at'),
-            'name' => 'required', Rule::unique('brands', 'name')->whereNull('deleted_at'),
-            'description' => 'required',
-            'thumbnail' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'status' => 'required|in:0,1',
-            'featured' => 'required|in:0,1',
-        ]);
+        $validatedData = $request->validated();
+
+        // Handle featured checkbox (if not checked, it won't be in the request)
+        if (!isset($validatedData['featured'])) {
+            $validatedData['featured'] = 0;
+        }
+
+        // Handle file upload if a new image is provided
+        if ($request->hasFile('thumbnail')) {
+            $path = $request->file('thumbnail')->store('brands', 'images');
+            $validatedData['thumbnail'] = $path;
+        }
+
         $this->brandServiceInterface->update($brand->id, $validatedData);
         return redirect()->route('admin.brand.index')->with('success', 'Brand updated successfully!');
     }
@@ -84,6 +91,9 @@ class BrandController extends Controller
     {
         $brandId = (int)$id;
         $this->brandServiceInterface->delete($brandId);
-        return redirect()->route('admin.brand.index')->with('success', 'Brand deleted successfully!');
+        return response()->json([
+            'success' => true,
+            'message' => 'Brand deleted successfully!',
+        ]);
     }
 }

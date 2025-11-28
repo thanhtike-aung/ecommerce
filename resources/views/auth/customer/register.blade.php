@@ -316,19 +316,11 @@
 
             <form id="signupForm">
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <div class="form-floating">
-                            <input type="text" name="first_name" class="form-control" id="floatingFirstName" placeholder="First Name" required>
-                            <label for="floatingFirstName">
-                                <i class="bi bi-person me-2"></i>First Name
-                            </label>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-floating">
-                            <input type="text" name="last_name" class="form-control" id="floatingLastName" placeholder="Last Name">
-                            <label for="floatingLastName">
-                                <i class="bi bi-person me-2"></i>Last Name
+                            <input type="text" name="name" class="form-control" id="floatingName" placeholder="Name" required>
+                            <label for="floatingName">
+                                <i class="bi bi-person me-2"></i>Name
                             </label>
                         </div>
                     </div>
