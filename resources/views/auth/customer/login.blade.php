@@ -290,7 +290,7 @@
     <div class="login-left col-md-5 d-none d-md-flex">
         <div>
             <div class="brand-logo">
-                <i class="bi bi-shop"></i> ShopZone
+                <i class="bi bi-shop"></i> Nexwear
             </div>
             <div class="brand-tagline">
                 Your premium ecommerce destination
@@ -499,7 +499,7 @@ $(function () {
     // Auto-fill demo (remove in production)
     // if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
     //     setTimeout(function() {
-    //         $('#floatingEmail').val('demo@shopzone.com');
+    //         $('#floatingEmail').val('demo@nexwear.com');
     //         $('#floatingPassword').val('password123');
     //     }, 500);
     // }

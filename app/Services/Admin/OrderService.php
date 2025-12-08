@@ -111,6 +111,16 @@ class OrderService implements OrderServiceInterface
      */
     private function prepareOrderData(array $data): array
     {
+        // Process shipping address data if it exists in structured format
+        if (isset($data['shipping_address_data']) && is_array($data['shipping_address_data'])) {
+            $data['shipping_address'] = json_encode($data['shipping_address_data']);
+        }
+
+        // Process billing address data if it exists in structured format
+        if (isset($data['billing_address_data']) && is_array($data['billing_address_data'])) {
+            $data['billing_address'] = json_encode($data['billing_address_data']);
+        }
+
         $orderData = [
             'user_id' => $data['user_id'],
             'status' => $data['status'] ?? 'pending',

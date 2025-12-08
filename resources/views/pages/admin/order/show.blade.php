@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Order Details - ShopZone')
+@section('title', 'Order Details - Nexwear')
 
 @section('content')
 <div class="container mt-4">
@@ -165,15 +165,64 @@
                     <div class="row">
                         <div class="col-md-6">
                             <h6>Shipping Address</h6>
-                            <address class="mb-4">
-                                {!! nl2br(e($order->shipping_address ?? 'No shipping address provided')) !!}
-                            </address>
+                            @php
+                                $shippingAddress = $order->shipping_address;
+                                $shippingAddressData = [];
+                                try {
+                                    $decoded = json_decode($shippingAddress, true);
+                                    if (is_array($decoded)) {
+                                        $shippingAddressData = $decoded;
+                                    }
+                                } catch (\Exception $e) {
+                                }
+                            @endphp
+
+                            @if(!empty($shippingAddressData))
+                                <address class="mb-4">
+                                    <strong>{{ $shippingAddressData['name'] ?? '' }}</strong><br>
+                                    {{ $shippingAddressData['street'] ?? '' }}<br>
+                                    {{ $shippingAddressData['city'] ?? '' }}{{ !empty($shippingAddressData['city']) && !empty($shippingAddressData['state']) ? ', ' : '' }}{{ $shippingAddressData['state'] ?? '' }} {{ $shippingAddressData['zip'] ?? '' }}<br>
+                                    {{ $shippingAddressData['country'] ?? '' }}<br>
+                                    @if(!empty($shippingAddressData['phone']))
+                                        <abbr title="Phone">P:</abbr> {{ $shippingAddressData['phone'] }}
+                                    @endif
+                                </address>
+                            @else
+                                <address class="mb-4">
+                                    {!! nl2br(e($order->shipping_address ?? 'No shipping address provided')) !!}
+                                </address>
+                            @endif
                         </div>
                         <div class="col-md-6">
                             <h6>Billing Address</h6>
-                            <address class="mb-4">
-                                {!! nl2br(e($order->billing_address ?? 'No billing address provided')) !!}
-                            </address>
+                            @php
+                                $billingAddress = $order->billing_address;
+                                $billingAddressData = [];
+                                try {
+                                    $decoded = json_decode($billingAddress, true);
+                                    if (is_array($decoded)) {
+                                        $billingAddressData = $decoded;
+                                    }
+                                } catch (\Exception $e) {
+                                    // Not JSON, keep as is
+                                }
+                            @endphp
+
+                            @if(!empty($billingAddressData))
+                                <address class="mb-4">
+                                    <strong>{{ $billingAddressData['name'] ?? '' }}</strong><br>
+                                    {{ $billingAddressData['street'] ?? '' }}<br>
+                                    {{ $billingAddressData['city'] ?? '' }}{{ !empty($billingAddressData['city']) && !empty($billingAddressData['state']) ? ', ' : '' }}{{ $billingAddressData['state'] ?? '' }} {{ $billingAddressData['zip'] ?? '' }}<br>
+                                    {{ $billingAddressData['country'] ?? '' }}<br>
+                                    @if(!empty($billingAddressData['phone']))
+                                        <abbr title="Phone">P:</abbr> {{ $billingAddressData['phone'] }}
+                                    @endif
+                                </address>
+                            @else
+                                <address class="mb-4">
+                                    {!! nl2br(e($order->billing_address ?? 'No billing address provided')) !!}
+                                </address>
+                            @endif
                         </div>
                     </div>
                     <div class="row">

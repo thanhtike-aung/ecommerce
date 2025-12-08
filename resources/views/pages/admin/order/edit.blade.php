@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Edit Order - ShopZone')
+@section('title', 'Edit Order - Nexwear')
 
 @section('content')
 <div class="container mt-4">
@@ -112,19 +112,119 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="shipping_address" class="form-label">Shipping Address</label>
-                                    <textarea class="form-control @error('shipping_address') is-invalid @enderror" id="shipping_address" name="shipping_address" rows="3">{{ old('shipping_address', $order->shipping_address) }}</textarea>
+                                    <label class="form-label">Shipping Address</label>
+                                    <div class="card">
+                                        <div class="card-body p-3">
+                                            @php
+                                                $shippingAddress = old('shipping_address', $order->shipping_address);
+                                                $shippingAddressData = [];
+
+                                                // Try to parse existing address if it's in JSON format
+                                                try {
+                                                    $decoded = json_decode($shippingAddress, true);
+                                                    if (is_array($decoded)) {
+                                                        $shippingAddressData = $decoded;
+                                                    }
+                                                } catch (\Exception $e) {
+                                                    // Not JSON, keep as is
+                                                }
+                                            @endphp
+
+                                            <div class="row g-2">
+                                                <div class="col-md-6 mb-2">
+                                                    <label for="shipping_name" class="form-label small">Full Name</label>
+                                                    <input type="text" class="form-control form-control-sm" id="shipping_name" name="shipping_address_data[name]" value="{{ $shippingAddressData['name'] ?? '' }}">
+                                                </div>
+                                                <div class="col-md-6 mb-2">
+                                                    <label for="shipping_phone" class="form-label small">Phone</label>
+                                                    <input type="text" class="form-control form-control-sm" id="shipping_phone" name="shipping_address_data[phone]" value="{{ $shippingAddressData['phone'] ?? '' }}">
+                                                </div>
+                                                <div class="col-12 mb-2">
+                                                    <label for="shipping_street" class="form-label small">Street Address</label>
+                                                    <input type="text" class="form-control form-control-sm" id="shipping_street" name="shipping_address_data[street]" value="{{ $shippingAddressData['street'] ?? '' }}">
+                                                </div>
+                                                <div class="col-md-4 mb-2">
+                                                    <label for="shipping_city" class="form-label small">City</label>
+                                                    <input type="text" class="form-control form-control-sm" id="shipping_city" name="shipping_address_data[city]" value="{{ $shippingAddressData['city'] ?? '' }}">
+                                                </div>
+                                                <div class="col-md-4 mb-2">
+                                                    <label for="shipping_state" class="form-label small">State/Province</label>
+                                                    <input type="text" class="form-control form-control-sm" id="shipping_state" name="shipping_address_data[state]" value="{{ $shippingAddressData['state'] ?? '' }}">
+                                                </div>
+                                                <div class="col-md-4 mb-2">
+                                                    <label for="shipping_zip" class="form-label small">ZIP/Postal Code</label>
+                                                    <input type="text" class="form-control form-control-sm" id="shipping_zip" name="shipping_address_data[zip]" value="{{ $shippingAddressData['zip'] ?? '' }}">
+                                                </div>
+                                                <div class="col-12">
+                                                    <label for="shipping_country" class="form-label small">Country</label>
+                                                    <input type="text" class="form-control form-control-sm" id="shipping_country" name="shipping_address_data[country]" value="{{ $shippingAddressData['country'] ?? '' }}">
+                                                </div>
+                                            </div>
+                                            <!-- Hidden field to store the JSON representation -->
+                                            <input type="hidden" id="shipping_address" name="shipping_address" value="{{ $shippingAddress }}">
+                                        </div>
+                                    </div>
                                     @error('shipping_address')
-                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        <div class="invalid-feedback d-block">{{ $message }}</div>
                                     @enderror
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="billing_address" class="form-label">Billing Address</label>
-                                    <textarea class="form-control @error('billing_address') is-invalid @enderror" id="billing_address" name="billing_address" rows="3">{{ old('billing_address', $order->billing_address) }}</textarea>
+                                    <label class="form-label">Billing Address</label>
+                                    <div class="card">
+                                        <div class="card-body p-3">
+                                            @php
+                                                $billingAddress = old('billing_address', $order->billing_address);
+                                                $billingAddressData = [];
+
+                                                // Try to parse existing address if it's in JSON format
+                                                try {
+                                                    $decoded = json_decode($billingAddress, true);
+                                                    if (is_array($decoded)) {
+                                                        $billingAddressData = $decoded;
+                                                    }
+                                                } catch (\Exception $e) {
+                                                    // Not JSON, keep as is
+                                                }
+                                            @endphp
+
+                                            <div class="row g-2">
+                                                <div class="col-md-6 mb-2">
+                                                    <label for="billing_name" class="form-label small">Full Name</label>
+                                                    <input type="text" class="form-control form-control-sm" id="billing_name" name="billing_address_data[name]" value="{{ $billingAddressData['name'] ?? '' }}">
+                                                </div>
+                                                <div class="col-md-6 mb-2">
+                                                    <label for="billing_phone" class="form-label small">Phone</label>
+                                                    <input type="text" class="form-control form-control-sm" id="billing_phone" name="billing_address_data[phone]" value="{{ $billingAddressData['phone'] ?? '' }}">
+                                                </div>
+                                                <div class="col-12 mb-2">
+                                                    <label for="billing_street" class="form-label small">Street Address</label>
+                                                    <input type="text" class="form-control form-control-sm" id="billing_street" name="billing_address_data[street]" value="{{ $billingAddressData['street'] ?? '' }}">
+                                                </div>
+                                                <div class="col-md-4 mb-2">
+                                                    <label for="billing_city" class="form-label small">City</label>
+                                                    <input type="text" class="form-control form-control-sm" id="billing_city" name="billing_address_data[city]" value="{{ $billingAddressData['city'] ?? '' }}">
+                                                </div>
+                                                <div class="col-md-4 mb-2">
+                                                    <label for="billing_state" class="form-label small">State/Province</label>
+                                                    <input type="text" class="form-control form-control-sm" id="billing_state" name="billing_address_data[state]" value="{{ $billingAddressData['state'] ?? '' }}">
+                                                </div>
+                                                <div class="col-md-4 mb-2">
+                                                    <label for="billing_zip" class="form-label small">ZIP/Postal Code</label>
+                                                    <input type="text" class="form-control form-control-sm" id="billing_zip" name="billing_address_data[zip]" value="{{ $billingAddressData['zip'] ?? '' }}">
+                                                </div>
+                                                <div class="col-12">
+                                                    <label for="billing_country" class="form-label small">Country</label>
+                                                    <input type="text" class="form-control form-control-sm" id="billing_country" name="billing_address_data[country]" value="{{ $billingAddressData['country'] ?? '' }}">
+                                                </div>
+                                            </div>
+                                            <!-- Hidden field to store the JSON representation -->
+                                            <input type="hidden" id="billing_address" name="billing_address" value="{{ $billingAddress }}">
+                                        </div>
+                                    </div>
                                     @error('billing_address')
-                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        <div class="invalid-feedback d-block">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="form-check mb-3">
@@ -258,19 +358,40 @@
 @push('scripts')
 <script>
 $(document).ready(function() {
+    // Function to update address JSON
+    function updateAddressJson(type) {
+        const addressData = {};
+        $(`[name^="${type}_address_data"]`).each(function() {
+            const fieldName = $(this).attr('name').match(/\[(.*?)\]/)[1];
+            addressData[fieldName] = $(this).val();
+        });
+        $(`#${type}_address`).val(JSON.stringify(addressData));
+    }
+
+    // Update JSON when input fields change
+    $('[name^="shipping_address_data"]').on('change', function() {
+        updateAddressJson('shipping');
+    });
+
+    $('[name^="billing_address_data"]').on('change', function() {
+        updateAddressJson('billing');
+    });
+
     // Same as shipping address checkbox
     $('#sameAsShipping').on('change', function() {
         if ($(this).is(':checked')) {
-            $('#billing_address').val($('#shipping_address').val());
+            // Copy all shipping fields to billing fields
+            $('[name^="shipping_address_data"]').each(function() {
+                const fieldName = $(this).attr('name').match(/\[(.*?)\]/)[1];
+                $(`#billing_${fieldName}`).val($(this).val());
+            });
+            updateAddressJson('billing');
         }
     });
 
-    // Update billing address when shipping address changes if checkbox is checked
-    $('#shipping_address').on('input', function() {
-        if ($('#sameAsShipping').is(':checked')) {
-            $('#billing_address').val($(this).val());
-        }
-    });
+    // Initialize JSON values
+    updateAddressJson('shipping');
+    updateAddressJson('billing');
 
     // Form submission
     $('#orderForm').on('submit', function(e) {

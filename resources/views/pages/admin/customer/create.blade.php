@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Create Customer - ShopZone')
+@section('title', 'Create Customer - Nexwear')
 
 @section('content')
 <div class="container mt-4">

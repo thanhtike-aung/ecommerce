@@ -268,7 +268,7 @@
     <div class="signup-left col-md-5 d-none d-md-flex">
         <div>
             <div class="brand-logo">
-                <i class="bi bi-shop"></i> ShopZone
+                <i class="bi bi-shop"></i> Nexwear
             </div>
             <div class="brand-tagline">
                 Join our premium ecommerce community
@@ -307,7 +307,7 @@
     <div class="signup-right col-md-7">
         <div class="w-100">
             <div class="welcome-text">Create Account</div>
-            <div class="welcome-subtitle">Join NEXWEAR today and start shopping</div>
+            <div class="welcome-subtitle">Join Nexwear today and start shopping</div>
 
             <div id="errorBox" class="alert-modern d-none">
                 <i class="bi bi-exclamation-triangle-fill me-2"></i>

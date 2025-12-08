@@ -14,13 +14,13 @@
                     <a class="nav-link {{ request()->routeIs('home') || request()->is('/') ? 'active' : '' }}" href="{{ route('home') }}">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->is('products*') ? 'active' : '' }}" href="{{ route('home') }}#products">Products</a>
+                    <a class="nav-link {{ request()->routeIs('customer.products.*') ? 'active' : '' }}" href="{{ route('customer.products.index') }}">Products</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('customer.brands.*') ? 'active' : '' }}" href="{{ route('customer.brands.index') }}">Brands</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->is('categories*') ? 'active' : '' }}" href="{{ route('home') }}#categories">Categories</a>
+                    <a class="nav-link {{ request()->routeIs('customer.categories.*') ? 'active' : '' }}" href="{{ route('customer.categories.index') }}">Categories</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link {{ request()->is('about*') ? 'active' : '' }}" href="{{ route('home') }}#about">About</a>
@@ -29,13 +29,30 @@
 
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="bi bi-search"></i></a>
+                    <a class="nav-link" href="{{ route('customer.products.index') }}"><i class="bi bi-search"></i></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('customer.wishlist.index') }}"><i class="bi bi-heart"></i></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="bi bi-cart3"></i> <span class="badge bg-primary">0</span></a>
+                    <a class="nav-link {{ request()->routeIs('customer.cart.*') ? 'active' : '' }}" href="{{ route('customer.cart.index') }}">
+                        <i class="bi bi-cart3"></i>
+                        @php
+                            $cartCount = 0;
+                            if (auth()->check()) {
+                                $cart = \App\Models\Cart::where('user_id', auth()->id())->first();
+                            } else {
+                                $sessionId = session()->get('cart_session_id');
+                                $cart = $sessionId ? \App\Models\Cart::where('session_id', $sessionId)->first() : null;
+                            }
+                            if ($cart) {
+                                $cartCount = $cart->total_quantity;
+                            }
+                        @endphp
+                        @if($cartCount > 0)
+                            <span class="badge bg-danger rounded-pill cart-count">{{ $cartCount }}</span>
+                        @endif
+                    </a>
                 </li>
                 @include('ui.components.nav-profile')
             </ul>

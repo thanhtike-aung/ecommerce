@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Edit Brand - ShopZone')
+@section('title', 'Edit Brand - Nexwear')
 
 
 @section('content')

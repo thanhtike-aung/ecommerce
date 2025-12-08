@@ -1,8 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'ShopZone - Your Premium Ecommerce Destination')
+@section('title', 'Nexwear - Your Premium Ecommerce Destination')
 
 @push('styles')
+<!-- SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 <style>
     .hero-section {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -322,7 +324,7 @@
                             @else
                                 <span class="h5 text-primary mb-0">${{ number_format($product->price, 2) }}</span>
                             @endif
-                            <button class="btn btn-outline-primary btn-sm add-to-cart" data-product-id="{{ $product->id }}">Add to Cart</button>
+                            <button class="btn btn-outline-primary btn-sm add-to-cart" data-product-id="{{ $product->id }}" onclick="addToCart({{ $product->id }}, 1)">Add to Cart</button>
                         </div>
                     </div>
                 </div>
@@ -338,7 +340,7 @@
                         <p class="card-text text-muted">High-performance laptop for professionals</p>
                         <div class="d-flex justify-content-between align-items-center">
                             <span class="h5 text-primary mb-0">$1,299</span>
-                            <button class="btn btn-outline-primary btn-sm">Add to Cart</button>
+                            <button class="btn btn-outline-primary btn-sm" disabled>Add to Cart</button>
                         </div>
                     </div>
                 </div>
@@ -353,7 +355,7 @@
                         <p class="card-text text-muted">Premium sound quality headphones</p>
                         <div class="d-flex justify-content-between align-items-center">
                             <span class="h5 text-primary mb-0">$199</span>
-                            <button class="btn btn-outline-primary btn-sm">Add to Cart</button>
+                            <button class="btn btn-outline-primary btn-sm" disabled>Add to Cart</button>
                         </div>
                     </div>
                 </div>
@@ -368,7 +370,7 @@
                         <p class="card-text text-muted">Advanced fitness and health tracking</p>
                         <div class="d-flex justify-content-between align-items-center">
                             <span class="h5 text-primary mb-0">$299</span>
-                            <button class="btn btn-outline-primary btn-sm">Add to Cart</button>
+                            <button class="btn btn-outline-primary btn-sm" disabled>Add to Cart</button>
                         </div>
                     </div>
                 </div>
@@ -383,7 +385,7 @@
                         <p class="card-text text-muted">Latest flagship smartphone</p>
                         <div class="d-flex justify-content-between align-items-center">
                             <span class="h5 text-primary mb-0">$899</span>
-                            <button class="btn btn-outline-primary btn-sm">Add to Cart</button>
+                            <button class="btn btn-outline-primary btn-sm" disabled>Add to Cart</button>
                         </div>
                     </div>
                 </div>
@@ -391,7 +393,7 @@
             @endforelse
         </div>
         <div class="text-center mt-5">
-            <a href="#" class="btn btn-primary btn-lg">View All Products</a>
+            <a href="{{ route('customer.products.index') }}" class="btn btn-primary btn-lg">View All Products</a>
         </div>
     </div>
 </section>
@@ -478,7 +480,7 @@
                     <div class="testimonial-avatar">
                         <i class="bi bi-person"></i>
                     </div>
-                    <p class="mb-3">"Amazing products and fast delivery! ShopZone has become my go-to online store."</p>
+                    <p class="mb-3">"Amazing products and fast delivery!  has become my go-to online store."</p>
                     <h6 class="fw-bold">Sarah Johnson</h6>
                     <small class="text-muted">Verified Customer</small>
                 </div>
@@ -513,7 +515,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-4 mb-4">
-                <h5><i class="bi bi-shop"></i> ShopZone</h5>
+                <h5><i class="bi bi-shop"></i> </h5>
                 <p class="text-muted">Your premium ecommerce destination for quality products and exceptional service.</p>
                 <div class="d-flex gap-3">
                     <a href="#" class="text-light"><i class="bi bi-facebook"></i></a>
@@ -525,19 +527,19 @@
             <div class="col-md-2 mb-4">
                 <h6>Quick Links</h6>
                 <ul class="list-unstyled">
-                    <li><a href="#" class="text-muted">Home</a></li>
-                    <li><a href="#" class="text-muted">Products</a></li>
-                    <li><a href="#" class="text-muted">Categories</a></li>
-                    <li><a href="#" class="text-muted">About Us</a></li>
+                    <li><a href="{{ route('home') }}" class="text-muted">Home</a></li>
+                    <li><a href="{{ route('customer.products.index') }}" class="text-muted">Products</a></li>
+                    <li><a href="{{ route('customer.categories.index') }}" class="text-muted">Categories</a></li>
+                    <li><a href="#about" class="text-muted">About Us</a></li>
                 </ul>
             </div>
             <div class="col-md-2 mb-4">
                 <h6>Support</h6>
                 <ul class="list-unstyled">
-                    <li><a href="#" class="text-muted">Help Center</a></li>
+                    <li><a href="{{ route('customer.dashboard') }}" class="text-muted">Help Center</a></li>
                     <li><a href="#" class="text-muted">Contact Us</a></li>
-                    <li><a href="#" class="text-muted">Shipping Info</a></li>
-                    <li><a href="#" class="text-muted">Returns</a></li>
+                    <li><a href="{{ route('customer.orders.index') }}" class="text-muted">My Orders</a></li>
+                    <li><a href="{{ route('customer.cart.index') }}" class="text-muted">My Cart</a></li>
                 </ul>
             </div>
             <div class="col-md-4 mb-4">
@@ -552,7 +554,7 @@
         <hr class="my-4">
         <div class="row align-items-center">
             <div class="col-md-6">
-                <p class="mb-0 text-muted">&copy; 2024 ShopZone. All rights reserved.</p>
+                <p class="mb-0 text-muted">&copy; 2024 . All rights reserved.</p>
             </div>
             <div class="col-md-6 text-end">
                 <a href="#" class="text-muted me-3">Privacy Policy</a>
@@ -564,6 +566,8 @@
 @endsection
 
 @push('scripts')
+<!-- SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
 $(document).ready(function() {
     // Smooth scrolling for navigation links
@@ -589,23 +593,70 @@ $(document).ready(function() {
     });
 
     // Add to cart functionality
-    $('.btn:contains("Add to Cart")').on('click', function() {
-        const productName = $(this).closest('.card').find('.card-title').text();
-        showToast(`${productName} added to cart!`, 'success');
+    function addToCart(productId, quantity) {
+        $.ajax({
+            url: '{{ route("customer.cart.add") }}',
+            type: 'POST',
+            data: {
+                product_id: productId,
+                quantity: quantity,
+                _token: '{{ csrf_token() }}'
+            },
+            success: function(response) {
+                // Show success message
+                Swal.fire({
+                    title: 'Success!',
+                    text: response.message,
+                    icon: 'success',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
 
-        // Update cart badge
-        const currentCount = parseInt($('.badge').text()) || 0;
-        $('.badge').text(currentCount + 1);
-    });
+                // Update cart count in navbar if it exists
+                if ($('.cart-count').length) {
+                    $('.cart-count').text(response.cart_count);
+                } else {
+                    // If cart count element doesn't exist, you might want to create it
+                    const cartIcon = $('.bi-cart3');
+                    if (cartIcon.length) {
+                        cartIcon.after('<span class="badge bg-danger rounded-pill cart-count">' + response.cart_count + '</span>');
+                    }
+                }
+            },
+            error: function(xhr) {
+                // Show error message
+                let errorMessage = 'An error occurred while adding to cart.';
+                if (xhr.responseJSON && xhr.responseJSON.message) {
+                    errorMessage = xhr.responseJSON.message;
+                }
+
+                Swal.fire({
+                    title: 'Error!',
+                    text: errorMessage,
+                    icon: 'error'
+                });
+            }
+        });
+    }
 
     // Newsletter subscription
     $('button:contains("Subscribe")').on('click', function() {
         const email = $(this).siblings('input[type="email"]').val();
         if (email) {
-            showToast('Thank you for subscribing!', 'success');
+            Swal.fire({
+                title: 'Thank you!',
+                text: 'Thank you for subscribing!',
+                icon: 'success',
+                timer: 2000,
+                showConfirmButton: false
+            });
             $(this).siblings('input[type="email"]').val('');
         } else {
-            showToast('Please enter a valid email address', 'warning');
+            Swal.fire({
+                title: 'Warning',
+                text: 'Please enter a valid email address',
+                icon: 'warning'
+            });
         }
     });
 });

@@ -166,7 +166,7 @@
                             </div>
                             <div class="col-md-8 d-flex align-items-end">
                                 <div class="d-grid gap-2 w-100">
-                                    <button class="btn btn-primary" {{ !$productWithDetails->isInStock() ? 'disabled' : '' }}>
+                                    <button id="addToCartBtn" class="btn btn-primary" {{ !$productWithDetails->isInStock() ? 'disabled' : '' }}>
                                         <i class="bi bi-bag-plus me-2"></i>Add to Cart
                                     </button>
                                 </div>
@@ -371,9 +371,13 @@
     height: auto;
 }
 </style>
+<!-- SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 @endpush
 
 @push('scripts')
+<!-- SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
 function changeMainImage(imageSrc, element) {
     $('.product-thumbnail').removeClass('border border-2 border-primary');
@@ -426,6 +430,66 @@ $(document).ready(function() {
             $('.rating-star').removeClass('text-warning');
         }
     );
+
+    // Add to Cart functionality
+    $('#addToCartBtn').on('click', function() {
+        const productId = "{{ $productWithDetails->id }}";
+        const quantity = parseInt($('#quantity').val());
+        const button = $(this);
+
+        // Disable button and show loading state
+        button.prop('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Adding...');
+
+        $.ajax({
+            url: '{{ route("customer.cart.add") }}',
+            type: 'POST',
+            data: {
+                product_id: productId,
+                quantity: quantity,
+                _token: '{{ csrf_token() }}'
+            },
+            success: function(response) {
+                // Show success message
+                Swal.fire({
+                    title: 'Success!',
+                    text: response.message,
+                    icon: 'success',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+
+                // Update cart count in navbar if it exists
+                if ($('.cart-count').length) {
+                    $('.cart-count').text(response.cart_count);
+                } else {
+                    // If cart count element doesn't exist, you might want to create it
+                    const cartIcon = $('.bi-cart');
+                    if (cartIcon.length) {
+                        cartIcon.after('<span class="badge bg-danger rounded-pill cart-count">' + response.cart_count + '</span>');
+                    }
+                }
+
+                // Reset button state
+                button.prop('disabled', false).html('<i class="bi bi-bag-plus me-2"></i>Add to Cart');
+            },
+            error: function(xhr) {
+                // Show error message
+                let errorMessage = 'An error occurred while adding to cart.';
+                if (xhr.responseJSON && xhr.responseJSON.message) {
+                    errorMessage = xhr.responseJSON.message;
+                }
+
+                Swal.fire({
+                    title: 'Error!',
+                    text: errorMessage,
+                    icon: 'error'
+                });
+
+                // Reset button state
+                button.prop('disabled', false).html('<i class="bi bi-bag-plus me-2"></i>Add to Cart');
+            }
+        });
+    });
 });
 </script>
 @endpush

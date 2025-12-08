@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\Customer\BrandController as CustomerBrandController;
+use App\Http\Controllers\Customer\CartController;
 use App\Http\Controllers\Customer\CategoryController as CustomerCategoryController;
+use App\Http\Controllers\Customer\CheckoutController;
 use App\Http\Controllers\Customer\DashboardController;
 use App\Http\Controllers\Customer\ProductController as CustomerProductController;
 use Illuminate\Support\Facades\Route;
@@ -36,6 +38,22 @@ Route::prefix('products')->group(function () {
 
 // Customer Dashboard Route
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['customer'])->name('customer.dashboard');
+
+// Cart Routes
+Route::prefix('cart')->group(function () {
+    Route::get('/', [CartController::class, 'index'])->name('customer.cart.index');
+    Route::post('/add', [CartController::class, 'addToCart'])->name('customer.cart.add');
+    Route::post('/update', [CartController::class, 'updateCartItem'])->name('customer.cart.update');
+    Route::post('/remove', [CartController::class, 'removeCartItem'])->name('customer.cart.remove');
+    Route::post('/clear', [CartController::class, 'clearCart'])->name('customer.cart.clear');
+});
+
+// Checkout Routes
+Route::prefix('checkout')->middleware(['auth'])->group(function () {
+    Route::get('/', [CheckoutController::class, 'index'])->name('customer.checkout.index');
+    Route::post('/process', [CheckoutController::class, 'process'])->name('customer.checkout.process');
+    Route::get('/confirmation/{order}', [CheckoutController::class, 'confirmation'])->name('customer.checkout.confirmation');
+});
 
 // User Profile Routes
 Route::middleware(['customer'])->group(function () {
