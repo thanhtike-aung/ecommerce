@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Customer\AboutController;
 use App\Http\Controllers\Customer\BrandController as CustomerBrandController;
 use App\Http\Controllers\Customer\CartController;
 use App\Http\Controllers\Customer\CategoryController as CustomerCategoryController;
@@ -69,3 +70,6 @@ Route::middleware(['customer'])->group(function () {
         return view('pages.customer.wishlist.index');
     })->name('customer.wishlist.index');
 });
+
+// About Us Route
+Route::get('/about', [AboutController::class, 'index'])->name('customer.about.index');

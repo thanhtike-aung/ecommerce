@@ -53,7 +53,7 @@ class AuthenticatedSessionController extends Controller
             }
         } else if ($routeName === 'customer.login') {
             $guard = 'customer';
-            $redirectPath = '/customer/dashboard';
+            $redirectPath = '/dashboard';
 
             // Check if user is a customer
             $credentials = $request->only('email', 'password');

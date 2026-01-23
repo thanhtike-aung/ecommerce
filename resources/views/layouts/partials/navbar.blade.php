@@ -23,7 +23,7 @@
                     <a class="nav-link {{ request()->routeIs('customer.categories.*') ? 'active' : '' }}" href="{{ route('customer.categories.index') }}">Categories</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->is('about*') ? 'active' : '' }}" href="{{ route('home') }}#about">About</a>
+                    <a class="nav-link {{ request()->routeIs('customer.about.*') ? 'active' : '' }}" href="{{ route('customer.about.index') }}">About Us</a>
                 </li>
             </ul>
 

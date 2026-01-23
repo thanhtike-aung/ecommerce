@@ -25,6 +25,9 @@
             </div>
 
             <div class="list-group mt-4 shadow-sm">
+                <a href="{{ route('customer.dashboard') }}" class="list-group-item list-group-item-action">
+                    <i class="bi bi-speedometer2 me-2"></i> Dashboard
+                </a>
                 <a href="{{ route('customer.profile.show') }}" class="list-group-item list-group-item-action">
                     <i class="bi bi-person me-2"></i> Profile
                 </a>
