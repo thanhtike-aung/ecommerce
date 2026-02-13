@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
@@ -84,16 +83,19 @@ class AuthenticatedSessionController extends Controller
     /**
      * Destroy an authenticated session.
      */
-    public function destroy(Request $request): Response
+    public function destroy(Request $request)
     {
         // Determine the guard based on the route
         $routeName = $request->route()->getName();
         $guard = 'web';
+        $redirectPath = '/';
 
         if ($routeName === 'admin.logout') {
             $guard = 'admin';
+            $redirectPath = '/admin/login';
         } else if ($routeName === 'customer.logout') {
             $guard = 'customer';
+            $redirectPath = '/customer/login';
         }
 
         Auth::guard($guard)->logout();
@@ -102,6 +104,6 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return response()->noContent();
+        return redirect($redirectPath);
     }
 }
